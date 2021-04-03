@@ -47,20 +47,20 @@ extension View {
     
     /// Finds a `UISplitViewController` from  a `SwiftUI.NavigationView` with style `DoubleColumnNavigationViewStyle`.
     public func introspectSplitViewController(customize: @escaping (UISplitViewController) -> ()) -> some View {
-            return inject(UIKitIntrospectionViewController(
-                selector: { introspectionViewController in
-                    
-                    // Search in ancestors
-                    if let splitViewController = introspectionViewController.splitViewController {
-                        return splitViewController
-                    }
-                    
-                    // Search in siblings
-                    return Introspect.previousSibling(containing: UISplitViewController.self, from: introspectionViewController)
-                },
-                customize: customize
-            ))
-        }
+        return inject(UIKitIntrospectionViewController(
+            selector: { introspectionViewController in
+
+                // Search in ancestors
+                if let splitViewController = introspectionViewController.splitViewController {
+                    return splitViewController
+                }
+
+                // Search in siblings
+                return Introspect.previousSibling(containing: UISplitViewController.self, from: introspectionViewController)
+            },
+            customize: customize
+        ))
+    }
     
     /// Finds the containing `UIViewController` of a SwiftUI view.
     public func introspectViewController(customize: @escaping (UIViewController) -> ()) -> some View {
@@ -167,6 +167,11 @@ extension View {
             selector: selector,
             customize: customize
         ))
+    }
+
+    /// Finds a `NSSplitViewController` from  a `SwiftUI.NavigationView` with style `DoubleColumnNavigationViewStyle`.
+    public func introspectSplitViewController(customize: @escaping (NSSplitView) -> ()) -> some View {
+        return introspect(selector: TargetViewSelector.ancestorOrSiblingContaining, customize: customize)
     }
     
     /// Finds a `NSTableView` from a `SwiftUI.List`, or `SwiftUI.List` child.
